@@ -1,0 +1,2 @@
+-- Data Manipulation Language: Insert, Update, Delete, Merge
+-- Data Manipulation Language: Call, Explain Plan, Lock Table
