@@ -42,32 +42,6 @@ public class csvDB {
 				// index)
 				tempArr = line.split(",");
 
-				String sqlQuery = "";
-				if (tableName.equals("node")) {
-					sqlQuery =
-							"INSERT INTO node VALUES ("
-									+ "'"
-									+ tempArr[0]
-									+ "',"
-									+ Integer.valueOf(tempArr[1])
-									+ ","
-									+ Integer.valueOf(tempArr[2])
-									+ ",'"
-									+ tempArr[3]
-									+ "',"
-									+ " '"
-									+ tempArr[4]
-									+ "',"
-									+ " '"
-									+ tempArr[5]
-									+ "',"
-									+ " '"
-									+ tempArr[6]
-									+ "',"
-									+ " '"
-									+ tempArr[7]
-									+ "')";
-				}
 				if (tableName.equals("hasEdge")) {
 					sqlQuery =
 							"INSERT INTO hasEdge VALUES ('"
@@ -88,6 +62,20 @@ public class csvDB {
 
 					if (tableName.equals("hasEdge")) {
 						//System.out.println("Calling addLength");
+				switch (tableName) {
+					case "node":
+						PreparedStatement nodePS = connection.prepareStatement("Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)");
+						nodePS.setString(1, tempArr[0]);
+						nodePS.setInt(2, Integer.parseInt(tempArr[1]));
+						nodePS.setInt(3, Integer.parseInt(tempArr[2]));
+						nodePS.setString(4, tempArr[3]);
+						nodePS.setString(5, tempArr[4]);
+						nodePS.setString(6, tempArr[5]);
+						nodePS.setString(7, tempArr[6]);
+						nodePS.setString(8, tempArr[7]);
+						nodePS.executeUpdate();
+						nodePS.close();
+						break;
 						EdgeDB.addLength(tempArr[1], tempArr[2]);
 						//System.out.println("after calling addLength");
 					}
@@ -97,6 +85,8 @@ public class csvDB {
 				} catch (SQLException e) {
 					e.printStackTrace();
 					System.err.println("populateTable() inner try/catch error");
+					default:
+						break;
 				}
 			}
 
