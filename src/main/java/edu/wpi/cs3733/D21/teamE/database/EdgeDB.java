@@ -177,7 +177,7 @@ public class EdgeDB {
 
 			stmt = connection.createStatement();
 
-			sqlQuery = "UPDATE hasEdge SET length = " + length + " WHERE startNode = '" + startNode + "' AND endNode = '" + endNode + "'";
+			sqlQuery = "UPDATE hasEdge SET length = " + Math.round(length) + " WHERE startNode = '" + startNode + "' AND endNode = '" + endNode + "'";
 
 			//executes the SQL insert statement (inserts the data into the table)
 			stmt.executeUpdate(sqlQuery);

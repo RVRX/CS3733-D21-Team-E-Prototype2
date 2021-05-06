@@ -118,7 +118,7 @@ public class App extends Application {
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
-			System.out.print("...DB missing, repopulating...");
+			System.out.print("...DB missing, repopulating...\n");
 			try {
 				DB.createAllTables();
 				DB.populateTable("node", nodes);
