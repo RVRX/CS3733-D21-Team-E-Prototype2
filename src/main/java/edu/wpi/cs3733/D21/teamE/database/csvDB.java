@@ -42,26 +42,6 @@ public class csvDB {
 				// index)
 				tempArr = line.split(",");
 
-				if (tableName.equals("hasEdge")) {
-					sqlQuery =
-							"INSERT INTO hasEdge VALUES ('"
-									+ tempArr[0]
-									+ "', '"
-									+ tempArr[1]
-									+ "', '"
-									+ tempArr[2]
-									+ "', NULL"
-									+ ")";
-				}
-
-
-				try {
-					Statement stmt = connection.createStatement();
-
-					stmt.execute(sqlQuery);
-
-					if (tableName.equals("hasEdge")) {
-						//System.out.println("Calling addLength");
 				switch (tableName) {
 					case "node":
 						PreparedStatement nodePS = connection.prepareStatement("Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -76,25 +56,23 @@ public class csvDB {
 						nodePS.executeUpdate();
 						nodePS.close();
 						break;
+					case "hasEdge":
+						PreparedStatement hasEdgePS = connection.prepareStatement("Insert Into hasEdge Values (?, ?, ?, Null)");
+						hasEdgePS.setString(1, tempArr[0]);
+						hasEdgePS.setString(2, tempArr[1]);
+						hasEdgePS.setString(3, tempArr[2]);
+						hasEdgePS.executeUpdate();
 						EdgeDB.addLength(tempArr[1], tempArr[2]);
-						//System.out.println("after calling addLength");
-					}
-
-					stmt.close();
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-					System.err.println("populateTable() inner try/catch error");
+						break;
 					default:
 						break;
 				}
 			}
-
 			// closes the BufferedReader
 			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.err.println("populateTable() outer try/catch error");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("error in populateTable() from csvDB");
 		}
 	}
 
