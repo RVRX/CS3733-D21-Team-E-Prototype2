@@ -102,7 +102,7 @@ public class csvDB {
 					}
 					rSet.close();
 
-					FileWriter nodeWriter = new FileWriter("CSVs/nodeOutput.csv");
+					FileWriter nodeWriter = new FileWriter("CSVs/out/nodeOutput.csv");
 					nodeWriter.write("nodeID,xCoord,yCoord,floor,building,nodeType,longName,shortName\n");
 					nodeWriter.write(String.valueOf(SB));
 					nodeWriter.close();
@@ -117,7 +117,7 @@ public class csvDB {
 					}
 					rSet.close();
 
-					FileWriter hasEdgeWriter = new FileWriter("CSVs/hasEdgeOutput.csv");
+					FileWriter hasEdgeWriter = new FileWriter("CSVs/out/hasEdgeOutput.csv");
 					hasEdgeWriter.write("edgeID,startNode,endNode,length\n");
 					hasEdgeWriter.write(String.valueOf(SB));
 					hasEdgeWriter.close();
@@ -134,7 +134,7 @@ public class csvDB {
 					}
 					rSet.close();
 
-					FileWriter requestsWriter = new FileWriter("CSVs/requestsOutput.csv");
+					FileWriter requestsWriter = new FileWriter("CSVs/out/requestsOutput.csv");
 					requestsWriter.write("requestID,creatorID,creationTime,requestType,requestStat,assigneeID\n");
 					requestsWriter.write(String.valueOf(SB));
 					requestsWriter.close();

@@ -92,7 +92,7 @@ public class EdgeCSVUpload {
 
 
         DB.getNewCSVFile("hasEdge");
-        File file = new File("CSVs/outputEdge.csv");
+        File file = new File("CSVs/out/hasEdgeOutput.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
         prepareEdges(treeTable);

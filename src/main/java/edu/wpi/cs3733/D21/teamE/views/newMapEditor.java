@@ -845,7 +845,6 @@ public class newMapEditor {
     public void fileOpenerNode(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             DB.getNewCSVFile("hasEdge");
@@ -873,10 +872,9 @@ public class newMapEditor {
     private void openFileNode(ActionEvent e) throws IOException {
 
         DB.getNewCSVFile("node");
-        File file = new File("CSVs/outputNode.csv");
+        File file = new File("CSVs/out/nodeOutput.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
-
     }
 
     /**
