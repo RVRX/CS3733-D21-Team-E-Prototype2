@@ -58,11 +58,13 @@ public class ServiceRequests {
         Image backgroundImage = backgroundImg;
         background.setImage(backgroundImage);
         background.setEffect(new GaussianBlur());
+        background.setPreserveRatio(false);
+        background.setFitWidth(primaryStage.getWidth());
+        background.setFitHeight(primaryStage.getHeight());
 
-        //background.setPreserveRatio(true);
         background.fitWidthProperty().bind(primaryStage.widthProperty());
-        //background.fitHeightProperty().bind(primaryStage.heightProperty());
-        pane.getChildren().add(bottomThing);
+        background.fitHeightProperty().bind(primaryStage.heightProperty());
+//        pane.getChildren().add(bottomThing);
 //        bottomThing.fitWidthProperty().bind(primaryStage.widthProperty());
 
         //init appBar
