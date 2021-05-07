@@ -59,7 +59,6 @@ Create Table userAccount
 );
 
 
-
 -- Create View visitorAccount As
 -- Select *
 -- From userAccount
@@ -252,19 +251,38 @@ Create Table aubonPainMenu
 Create Table ToDo
 (
 	ToDoID           int Primary Key,
-	userID           varchar(31) References userAccount Not Null,
-	title            varchar(31)                        Not Null,
-	status           int                                Not Null, -- normal/complete/archived/deleted/...
-	priority         int                                Not Null, -- 1/2/3/...
+	userID           int References userAccount Not Null,
+	title            varchar(31)                Not Null,
+	status           int                        Not Null, -- normal/complete/archived/deleted/...
+	priority         int                        Not Null, -- 1/2/3/...
 
-	scheduledTime    Time,                                        -- nullable, edited frequently
-	nodeID           varchar(31) References node,                 -- nullable
-	requestID        int References requests,                     -- nullable, auto-add to list when assigned
-	appointmentID    int References appointment,                  -- nullable
+	scheduledDate    Date,                                -- nullable, edited frequently
+	scheduledTime    Time,                                -- nullable, edited frequently
+	nodeID           varchar(31) References node,         -- nullable
 	detail           varchar(255),
-	expectedTime     Time,                                        -- how long it would take
-	notificationTime Time                                         -- eg. remind me 30 mins before this (send email)
+	expectedLength   Time,                                -- how long it would take
+	notificationTime Time                                 -- eg. remind me 30 mins before this (send email)
 );
+
+
+Select 'appointment' As todoType, ToDoID, userID, title, status, priority, appointmentDate As scheduledDate, startTime As schedueledTime, nodeID, detail, expectedLength, notificationTime, Null As requestType
+From (Select appointmentID As ToDoID, appointmentDate, startTime
+      From appointment
+      Where doctorID = ?) As apI
+	     Join (Select *
+	           From ToDo
+	           Where userID = ?) As TDI Using (ToDoID)
+Union
+Select 'todo' As todoType, ToDoID, userID, title, status, priority, scheduledDate, scheduledTime, nodeID, detail, expectedLength, notificationTime, Null As requestType
+From ToDo
+Union
+Select 'request' As todoType, ToDoID, userID, title, status, priority, scheduledDate, scheduledTime, nodeID, detail, expectedLength, notificationTime, requestType
+From (Select requestID As ToDoID, requestType
+      From requests
+      Where assigneeID = ?) As rqI
+	     Join (Select *
+	           From ToDo
+	           Where userID = ?) As TDII Using (ToDoID);
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
@@ -348,27 +366,27 @@ END;
 */
 
 
-Insert Into userAccount
-Values (24, 'rosas1@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
-Insert Into userAccount
-Values (25, 'rosas2@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
-Insert Into userAccount
-Values (26, 'rosas3@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
-Insert Into userAccount
-Values (27, 'rosas4@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
-Insert Into userAccount
-Values (28, 'rosas5@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
-Insert Into userAccount
-Values (29, 'rosas6@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
-Insert Into userAccount
-Values (30, 'rosas7@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (24, 'rosas1@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (25, 'rosas2@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (26, 'rosas3@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (27, 'rosas4@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (28, 'rosas5@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (29, 'rosas6@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+-- Insert Into userAccount
+-- Values (30, 'rosas7@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
 
 
 
-Insert Into node
-Values ('FDEPT00501', 2128, 1300, '1', 'Tower', 'DEPT', 'Emergency Department', 'Emergency');
-Insert Into node
-Values ('EEXIT00101', 2275, 785, '1', '45 Francis', 'EXIT', 'Ambulance Parking Exit Floor 1', 'AmbExit 1');
+-- Insert Into node
+-- Values ('FDEPT00501', 2128, 1300, '1', 'Tower', 'DEPT', 'Emergency Department', 'Emergency');
+-- Insert Into node
+-- Values ('EEXIT00101', 2275, 785, '1', '45 Francis', 'EXIT', 'Ambulance Parking Exit Floor 1', 'AmbExit 1');
 
 
 -- requestID    int Primary Key,
@@ -377,28 +395,28 @@ Values ('EEXIT00101', 2275, 785, '1', '45 Francis', 'EXIT', 'Ambulance Parking E
 --                          requestType  varchar(31),
 --                          requestStatus varchar(10),
 --                          assignee varchar(31),
-Insert Into requests
-Values (1, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (2, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (3, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (4, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (5, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (6, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (7, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (8, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (9, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (10, 24, 'extTransport', 'inProgress', 'asdflkdj');
-Insert Into requests
-Values (11, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (1, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (2, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (3, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (4, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (5, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (6, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (7, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (8, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (9, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (10, 24, 'extTransport', 'inProgress', 'asdflkdj');
+-- Insert Into requests
+-- Values (11, 24, 'extTransport', 'inProgress', 'asdflkdj');
 
 --                              requestID int Primary Key References requests On Delete Cascade,
 --                              roomID varchar(31) Not Null References node On Delete Cascade,
@@ -408,32 +426,32 @@ Values (11, 24, 'extTransport', 'inProgress', 'asdflkdj');
 --                              ETA varchar(100),
 --                              description varchar(5000),
 
-Insert Into extTransport
-Values (1, 'EEXIT00101', 'Ambulance', 'High Severity', 12334567, '5 minutes',
-        'Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ');
-Insert Into extTransport
-Values (2, 'EEXIT00101', 'Ambulance', 'Low Severity', 4093380, '20 minutes',
-        'Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.');
-Insert Into extTransport
-Values (3, 'FDEPT00501', 'Helicopter', 'High Severity', 92017693, '10 minutes',
-        'Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.');
-Insert Into extTransport
-Values (4, 'FDEPT00501', 'Helicopter', 'High Severity', 93754789, '20 minutes',
-        'Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.');
-Insert Into extTransport
-Values (5, 'EEXIT00101', 'Ambulance', 'Medium Severity', 417592, '10 minutes',
-        'Smoke inhalation due to a fire. No burns but difficult time breathing.');
-Insert Into extTransport
-Values (6, 'FDEPT00501', 'Helicopter', 'High Severity', 44888936, '15 minutes',
-        'Major car crash on highway. Middle aged woman ejected from the passengers seat. Awake and unresponsive and in critical condition');
-Insert Into extTransport
-Values (7, 'EEXIT00101', 'Ambulance', 'Medium Severity', 33337861, '7 minutes',
-        'Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.');
-Insert Into extTransport
-Values (8, 'EEXIT00101', 'Ambulance', 'Low Severity', 40003829, '10 minutes',
-        'Relocating a patient with lung cancer from Mt.Auburn Hospital.');
-Insert Into extTransport
-Values (9, 'FDEPT00501', 'Plane', 'High Severity', 38739983, '12 hours', 'Heart transplant organ in route');
+-- Insert Into extTransport
+-- Values (1, 'EEXIT00101', 'Ambulance', 'High Severity', 12334567, '5 minutes',
+--         'Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ');
+-- Insert Into extTransport
+-- Values (2, 'EEXIT00101', 'Ambulance', 'Low Severity', 4093380, '20 minutes',
+--         'Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.');
+-- Insert Into extTransport
+-- Values (3, 'FDEPT00501', 'Helicopter', 'High Severity', 92017693, '10 minutes',
+--         'Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.');
+-- Insert Into extTransport
+-- Values (4, 'FDEPT00501', 'Helicopter', 'High Severity', 93754789, '20 minutes',
+--         'Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.');
+-- Insert Into extTransport
+-- Values (5, 'EEXIT00101', 'Ambulance', 'Medium Severity', 417592, '10 minutes',
+--         'Smoke inhalation due to a fire. No burns but difficult time breathing.');
+-- Insert Into extTransport
+-- Values (6, 'FDEPT00501', 'Helicopter', 'High Severity', 44888936, '15 minutes',
+--         'Major car crash on highway. Middle aged woman ejected from the passengers seat. Awake and unresponsive and in critical condition');
+-- Insert Into extTransport
+-- Values (7, 'EEXIT00101', 'Ambulance', 'Medium Severity', 33337861, '7 minutes',
+--         'Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.');
+-- Insert Into extTransport
+-- Values (8, 'EEXIT00101', 'Ambulance', 'Low Severity', 40003829, '10 minutes',
+--         'Relocating a patient with lung cancer from Mt.Auburn Hospital.');
+-- Insert Into extTransport
+-- Values (9, 'FDEPT00501', 'Plane', 'High Severity', 38739983, '12 hours', 'Heart transplant organ in route');
 
 
 

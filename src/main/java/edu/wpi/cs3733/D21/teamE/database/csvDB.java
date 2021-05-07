@@ -171,7 +171,7 @@ public class csvDB {
 			}
 
 			// create a file writer to write to files
-			FileWriter nodeWriter = new FileWriter("CSVs/outputRemovedPatientAppointmentHistory.csv");
+			FileWriter nodeWriter = new FileWriter("CSVs/out/outputRemovedPatientAppointmentHistory.csv");
 			nodeWriter.write("appointmentID, patientID, doctorID, nodeID, startTime, endTime\n");
 			nodeWriter.write(String.valueOf(strBuild));
 			nodeWriter.close();
