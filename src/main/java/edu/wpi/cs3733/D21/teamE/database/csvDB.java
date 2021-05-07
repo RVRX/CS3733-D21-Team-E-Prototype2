@@ -180,4 +180,10 @@ public class csvDB {
 			e.printStackTrace();
 		}
 	}
+
+	public static void main(String[] args) {
+		getNewCSVFile("node");
+		getNewCSVFile("hasEdge");
+		getNewCSVFile("requests");
+	}
 }
