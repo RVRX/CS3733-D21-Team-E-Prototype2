@@ -122,6 +122,23 @@ public class csvDB {
 					hasEdgeWriter.close();
 					break;
 
+				case "requests":
+					while (rSet.next()) {
+						SB.append(rSet.getString("requestID")).append(",");
+						SB.append(rSet.getString("creatorID")).append(",");
+						SB.append(rSet.getString("creationTime")).append(",");
+						SB.append(rSet.getString("requestType")).append(",");
+						SB.append(rSet.getString("requestStatus")).append(",");
+						SB.append(rSet.getString("assigneeID")).append("\n");
+					}
+					rSet.close();
+
+					FileWriter requestsWriter = new FileWriter("CSVs/requestsOutput.csv");
+					requestsWriter.write("requestID, creatorID, creationTime, requestType, requestStat, assigneeID\n");
+					requestsWriter.write(String.valueOf(SB));
+					requestsWriter.close();
+					break;
+
 				default:
 					System.err.println("Table Name Not Recognized");
 					break;
