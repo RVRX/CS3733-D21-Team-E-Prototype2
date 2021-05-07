@@ -42,7 +42,7 @@ public class RequestsDB {
 	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 * - assigneeID: this is the person who is assigned to the request
 	 */
-	public static void createRequestsTable() {
+	public static int createRequestsTable() {
 
 		String query = "Create Table requests(" +
 				"requestID     int Primary Key, " +
@@ -60,8 +60,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating requests table");
+			System.out.println("|--- Failed to create requests table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -76,7 +78,7 @@ public class RequestsDB {
 	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 * *                for whoever is fufilling the request
 	 */
-	public static void createFloralRequestsTable() {
+	public static int createFloralRequestsTable() {
 
 		String query = "Create Table floralRequests( " +
 				"requestID     int Primary Key References requests On Delete Cascade, " +
@@ -99,8 +101,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating floralRequests table");
+			System.out.println("|--- Failed to create floralRequests  table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -114,7 +118,7 @@ public class RequestsDB {
 	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
 	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
 	 */
-	public static void createSanitationTable() {
+	public static int createSanitationTable() {
 
 		String query = "Create Table sanitationRequest( " +
 				"    requestID int Primary Key References requests On Delete Cascade, " +
@@ -133,8 +137,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating sanitationRequest table");
+			System.out.println("|--- Failed to create sanitationRequest table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -148,7 +154,7 @@ public class RequestsDB {
 	 * - ETA: this is the estimated time the patient will arrive.
 	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
 	 */
-	public static void createExtTransportTable() {
+	public static int createExtTransportTable() {
 
 		String query = "Create Table extTransport( " +
 				"    requestID int Primary Key References requests On Delete Cascade, " +
@@ -170,8 +176,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating extTransport table");
+			System.out.println("|--- Failed to create extTransport table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -185,7 +193,7 @@ public class RequestsDB {
 	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
 	 * - signature: this the signature (name in print) of the user who is filling out the request
 	 */
-	public static void createMedDeliveryTable() {
+	public static int createMedDeliveryTable() {
 
 		String query = "Create Table medDelivery ( " +
 				"requestID  int Primary Key References requests On Delete Cascade," +
@@ -202,8 +210,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating medDelivery table");
+			System.out.println("|--- Failed to create medDelivery table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -214,7 +224,7 @@ public class RequestsDB {
 	 * - level: this is the security level that is needed
 	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
 	 */
-	public static void createSecurityServTable() {
+	public static int createSecurityServTable() {
 
 		String query = "Create Table securityServ ( " +
 				"requestID  int Primary Key References requests On Delete Cascade," +
@@ -231,8 +241,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating securityServ table");
+			System.out.println("|--- Failed to create securityServ table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -243,7 +255,7 @@ public class RequestsDB {
 	 * - languageType: this is the type of language the user is requesting
 	 * - description: detailed description of request
 	 */
-	public static void createLanguageRequestTable() {
+	public static int createLanguageRequestTable() {
 
 		String query = "Create Table languageRequest " +
 				"( " +
@@ -260,9 +272,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating languageRequest table");
+			System.out.println("|--- Failed to create languageRequest table");
+			return 0;
 		}
-
+		return 1;
 	}
 
 	/**
@@ -274,7 +287,7 @@ public class RequestsDB {
 	 * - dryLoadAmount: amount of loads needed to dry
 	 * - description:  detailed description of request
 	 */
-	public static void createLaundryRequestTable() {
+	public static int createLaundryRequestTable() {
 
 		String query = "Create Table laundryRequest " +
 				"( " +
@@ -292,9 +305,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating laundryRequest table");
+			System.out.println("|--- Failed to create laundryRequest table");
+			return 0;
 		}
-
+		return 1;
 	}
 
 	/**
@@ -307,7 +321,7 @@ public class RequestsDB {
 	 * - ETA: time taken to complete the request
 	 * - description: detailed description of request
 	 */
-	public static void createMaintenanceRequestTable() {
+	public static int createMaintenanceRequestTable() {
 
 		String query = "Create Table maintenanceRequest " +
 				"( " +
@@ -326,9 +340,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating maintenanceRequest table");
+			System.out.println("|--- Failed to create maintenanceRequest table");
+			return 0;
 		}
-
+		return 1;
 	}
 
 	/**
@@ -341,7 +356,7 @@ public class RequestsDB {
 	 * - beverage: the drink the user is ordering
 	 * - comments: any comments the user wants to leave for the person fulfilling the request
 	 */
-	public static void createFoodDeliveryTable() {
+	public static int createFoodDeliveryTable() {
 
 		String query = "Create Table foodDelivery ( " +
 				"    requestID int Primary Key References requests (requestID) On Delete Cascade, " +
@@ -359,13 +374,13 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating foodDelivery table");
+			System.out.println("|--- Failed to create foodDelivery table");
+			return 0;
 		}
-
-
+		return 1;
 	}
 
-	public static void createInternalPatientRequest() {
+	public static int createInternalPatientRequest() {
 		String query = "Create Table internalPatientRequest " +
 				"( " +
 				"    requestID int Primary Key References requests On Delete Cascade, " +
@@ -381,11 +396,12 @@ public class RequestsDB {
 
 			prepState.execute();
 
-
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating internalPatientRequest table");
+			System.out.println("|--- Failed to create internalPatientRequest table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -397,7 +413,7 @@ public class RequestsDB {
 	 * - description: detailed description of request
 	 * - religionType: religion
 	 */
-	public static void createReligionRequestTable() {
+	public static int createReligionRequestTable() {
 
 		String query = "Create Table religiousRequest " +
 				"( " +
@@ -411,17 +427,19 @@ public class RequestsDB {
 			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating religiousRequests table");
+			System.out.println("|--- Failed to create religiousRequests table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
 	 * create the entry request table
 	 * decision: 0 for not filled, 1 for allow, 2 for ER, 3 for block
 	 */
-	public static void createEntryRequestTable() {
+	public static int createEntryRequestTable() {
 		// CovidSurveyObject has the following fields:
-			// Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms
+		// Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms
 		String query = "Create Table entryRequest " +
 				"( " +
 				"entryrequestID     int Primary Key, " +
@@ -436,8 +454,10 @@ public class RequestsDB {
 			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating entryRequest table");
+			System.out.println("|--- Failed to create entryRequest table");
+			return 0;
 		}
+		return 1;
 	}
 
 
@@ -450,7 +470,7 @@ public class RequestsDB {
 	 * - foodCalories: this is the number of calories the food item has
 	 * - foodDescription: this is a description of the food item
 	 */
-	public static void createAubonPainMenuTable() {
+	public static int createAubonPainMenuTable() {
 		String query = "Create Table aubonPainMenu( " +
 				"    foodImage varchar(600), " +
 				"    foodItem varchar(100) Primary Key, " +
@@ -465,8 +485,10 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating aubonPainMenu table");
+			System.out.println("|--- Failed to create aubonPainMenu table");
+			return 0;
 		}
+		return 1;
 	}
 
 
@@ -825,6 +847,7 @@ public class RequestsDB {
 	}
 
 	//TODO: Not tested
+
 	/**
 	 * adds a request for food delivery
 	 * @param userID           ID of the user
@@ -892,7 +915,7 @@ public class RequestsDB {
 	 * @param foodCalories    this is the number of calories the food item has
 	 * @param foodDescription this is a description of the food item
 	 */
-	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription) {
 
 		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
@@ -1033,7 +1056,6 @@ public class RequestsDB {
 
 
 	/**
-	 *
 	 * @param covidSurveyObj
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
@@ -2015,31 +2037,31 @@ public class RequestsDB {
 
 	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
 
-	ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
+		ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
 
-	String query = "Select * From entryRequest";
+		String query = "Select * From entryRequest";
 
-	try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
 
-		ResultSet rset = prepStat.executeQuery();
+			ResultSet rset = prepStat.executeQuery();
 
-		while (rset.next()) {
+			while (rset.next()) {
 
-			int requestID = rset.getInt("entryRequestID");
-			boolean positiveTest = rset.getBoolean("positiveTest");
-			boolean symptoms = rset.getBoolean("symptoms");
-			boolean closeContact = rset.getBoolean("closeContact");
-			boolean quarantine = rset.getBoolean("quarantine");
-			boolean noSymptoms = rset.getBoolean("noSymptoms");
-			String status = rset.getString("status");
-			covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+				int requestID = rset.getInt("entryRequestID");
+				boolean positiveTest = rset.getBoolean("positiveTest");
+				boolean symptoms = rset.getBoolean("symptoms");
+				boolean closeContact = rset.getBoolean("closeContact");
+				boolean quarantine = rset.getBoolean("quarantine");
+				boolean noSymptoms = rset.getBoolean("noSymptoms");
+				String status = rset.getString("status");
+				covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+			}
+
+			rset.close();
+
+		} catch (SQLException e) {
+			System.err.println("getCovidSurveys Error : " + e);
 		}
-
-		rset.close();
-
-	} catch (SQLException e) {
-		System.err.println("getCovidSurveys Error : " + e);
-	}
 		return covidSurveys;
 
 	}
@@ -2056,7 +2078,6 @@ public class RequestsDB {
 			System.err.println("Error in updating markAsCovidSafe");
 			return 0;
 		}
-
 
 
 	}

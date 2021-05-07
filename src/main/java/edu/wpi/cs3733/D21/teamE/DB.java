@@ -20,29 +20,35 @@ public class DB {
 
 	// AppointmentDB:
 
-	public static void createAllTables() {
-		NodeDB.createNodeTable();
-		EdgeDB.createEdgeTable();
-		UserAccountDB.createUserAccountTable();
-		RequestsDB.createRequestsTable();
-		RequestsDB.createFloralRequestsTable();
-		RequestsDB.createSanitationTable();
-		RequestsDB.createExtTransportTable();
-		RequestsDB.createMedDeliveryTable();
-		RequestsDB.createSecurityServTable();
-		appointmentDB.createAppointmentTable();
-		RequestsDB.createLanguageRequestTable();
-		RequestsDB.createLaundryRequestTable();
-		RequestsDB.createMaintenanceRequestTable();
-		RequestsDB.createFoodDeliveryTable();
-		RequestsDB.createInternalPatientRequest();
-		RequestsDB.createAubonPainMenuTable();
-		RequestsDB.createReligionRequestTable();
-		RequestsDB.createEntryRequestTable();
+	public static int createAllTables() {
+		int numOfTableCreated = 0;
+		numOfTableCreated += NodeDB.createNodeTable() * 1001;
+		numOfTableCreated += EdgeDB.createEdgeTable() * 101;
+		numOfTableCreated += UserAccountDB.createUserAccountTable();
+		numOfTableCreated += appointmentDB.createAppointmentTable();
+		numOfTableCreated += RequestsDB.createRequestsTable();
+		numOfTableCreated += RequestsDB.createFloralRequestsTable();
+		numOfTableCreated += RequestsDB.createSanitationTable();
+		numOfTableCreated += RequestsDB.createExtTransportTable();
+		numOfTableCreated += RequestsDB.createMedDeliveryTable();
+		numOfTableCreated += RequestsDB.createSecurityServTable();
+		numOfTableCreated += RequestsDB.createLanguageRequestTable();
+		numOfTableCreated += RequestsDB.createLaundryRequestTable();
+		numOfTableCreated += RequestsDB.createMaintenanceRequestTable();
+		numOfTableCreated += RequestsDB.createFoodDeliveryTable();
+		numOfTableCreated += RequestsDB.createInternalPatientRequest();
+		numOfTableCreated += RequestsDB.createAubonPainMenuTable();
+		numOfTableCreated += RequestsDB.createReligionRequestTable();
+		numOfTableCreated += RequestsDB.createEntryRequestTable();
+		return numOfTableCreated;
 	}
 
-	public static void createNodeTable() {
-		NodeDB.createNodeTable();
+	public static boolean addDataFromCSVs() {
+		return makeConnection.makeConnection().addDataFromCSVs();
+	}
+
+	public static int createNodeTable() {
+		return NodeDB.createNodeTable();
 	}
 
 	/**

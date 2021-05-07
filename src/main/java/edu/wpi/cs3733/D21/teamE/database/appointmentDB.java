@@ -1,12 +1,15 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class appointmentDB {
 
 	static Connection connection = makeConnection.makeConnection().connection;
 
-	public static void createAppointmentTable() {
+	public static int createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV
 		String query = "Create Table appointment( " +
 				"    appointmentID Int Primary Key, " +
@@ -23,9 +26,11 @@ public class appointmentDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error creating appointment table");
+			//e.printStackTrace();
+			System.out.println("|--- Failed to create appointment table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -148,7 +153,7 @@ public class appointmentDB {
 	}
 
 	public static int getAppointmentID(int patientID, String startTime, String date) {
-		String getAppointmentID = "select * from appointment where patientID = ? AND startTime = ? AND appointmentDate = ?";
+		String getAppointmentID = "Select * From appointment Where patientID = ? And startTime = ? And appointmentDate = ?";
 		int appointmentID = 0;
 		try (PreparedStatement prepState = connection.prepareStatement(getAppointmentID)) {
 
@@ -158,8 +163,8 @@ public class appointmentDB {
 
 			ResultSet rset = prepState.executeQuery();
 
-			while(rset.next()) {
-				appointmentID =  rset.getInt("appointmentID");
+			while (rset.next()) {
+				appointmentID = rset.getInt("appointmentID");
 			}
 
 

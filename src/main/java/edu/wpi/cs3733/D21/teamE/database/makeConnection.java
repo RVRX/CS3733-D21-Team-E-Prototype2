@@ -16,31 +16,24 @@ public class makeConnection {
 	// private constructor restricted to this class itself
 	public makeConnection() {
 		// Initialize DB
-		System.out.println("Starting connection to Apache Derby\n");
+		System.out.println("Starting connection to Apache Derby");
+
+		Properties props = new Properties();
+		props.put("user", "admin");
+		props.put("password", "admin");
 		try {
-
-			//Makes it so a username and password (hardcoded) is needed to access the database data
-			Properties props = new Properties();
-			props.put("user", "admin");
-			props.put("password", "admin");
-
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-
 			try {
-				/*
-				 * Before making this connectin make sure you're database tab in Intellij
-				 * Is not connected to the database! This will cause the DriverManager to
-				 * Throw an SQLException and goof a bunch of stuff up!
-				 */
-				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
-				// this.connection.setAutoCommit(false);
+				connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+				System.out.println("\nConnected to the DB");
 			} catch (SQLException e) {
-				// e.printStackTrace();
-				System.err.println("error with the DriverManager, check if you have connected to database in IntelliJ");
+				//e.printStackTrace();
+				System.err.println("Error with the DriverManager");
+				System.err.println("\n\n\n---------- Did you connect to database with IntelliJ? ----------\n\n\n");
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			System.err.println("error with the EmbeddedDriver class.forName thing");
+			System.err.println("error with the EmbeddedDriver class");
 		}
 	}
 
@@ -82,10 +75,7 @@ public class makeConnection {
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
-//			stmt.execute("Drop View visitoraccount");
-//			stmt.execute("Drop View patientaccount");
-//			stmt.execute("Drop View doctoraccount");
-//			stmt.execute("Drop View adminaccount");
+			//stmt.execute("Drop Table ToDo");
 			stmt.execute("Drop Table useraccount");
 			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");
@@ -116,6 +106,10 @@ public class makeConnection {
 			System.out.println("Tables already there");
 			return true;
 		} else return false;
+	}
+
+	public boolean addDataFromCSVs() {
+		return false;
 	}
 
 

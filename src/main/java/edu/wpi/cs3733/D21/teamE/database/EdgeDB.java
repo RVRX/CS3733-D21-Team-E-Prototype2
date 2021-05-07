@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import javafx.util.Pair;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class EdgeDB {
 	 * - startNode: this is a nodeID in which the edge connection starts.
 	 * - endNode: this is a nodeID in which the edge connection ends.
 	 */
-	public static void createEdgeTable() {
+	public static int createEdgeTable() {
 
 		String query = "Create Table hasEdge"
 				+ "("
@@ -33,8 +34,10 @@ public class EdgeDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating hasEdge table");
+			System.out.println("|--- Failed to create hasEdge table");
+			return 0;
 		}
+		return 1;
 	}
 
 	public static void deleteEdgeTable() {
@@ -190,7 +193,6 @@ public class EdgeDB {
 
 
 	}
-
 
 
 	/**

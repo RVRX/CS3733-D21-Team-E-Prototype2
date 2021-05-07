@@ -693,8 +693,8 @@ public class MapEditor {
             File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
-            connection.deleteAllTables();
-            DB.createAllTables();
+            //connection.deleteAllTables(); This is bad cuz we have other data
+            //DB.createAllTables();
             DB.populateTable("node", file);
             DB.populateTable("hasEdge", saveEdges);
             System.out.println("Success");

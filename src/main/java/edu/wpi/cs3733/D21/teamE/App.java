@@ -26,6 +26,7 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 
 public class App extends Application {
@@ -111,26 +112,39 @@ public class App extends Application {
 	@Override
 	public void init() {
 		System.out.println("Starting App Init...");
-		makeConnection connection = makeConnection.makeConnection();
-		System.out.println("...Connected to the DB");
+
+		System.out.println("\nCreating Tables\n");
+		int result = DB.createAllTables();
+		int numOfTableCreated = result / 100;
+		if (numOfTableCreated == 0 || numOfTableCreated == 1) {
+			System.out.println(numOfTableCreated + " table Created");
+		} else {
+			System.out.println(numOfTableCreated + " tables Created");
+		}
+
+		if (result > 1000) {
+			System.out.println("\nPopulating node Table");
+			File nodes = new File("CSVs/MapEAllnodes.csv");
+			DB.populateTable("node", nodes);
+		}
+		if (result > 100) {
+			System.out.println("\nPopulating edge Table");
+			File edges = new File("CSVs/MapEAlledges.csv");
+			DB.populateTable("hasEdge", edges);
+		}
+
+		if (DB.addDataFromCSVs()) System.out.println("\nPreserved data added from csv");
+
+		System.out.println("Populating Abon Pain Table");
+		DB.populateAbonPainTable();
+
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
-		File nodes = new File("CSVs/MapEAllnodes.csv");
-		File edges = new File("CSVs/MapEAlledges.csv");
-		boolean tablesExist = connection.allTablesThere();
-		if(!tablesExist){
-			System.out.print("...DB missing, repopulating...");
+		for (int ID : sheetIDs) {
 			try {
-				DB.createAllTables();
-				DB.populateTable("node", nodes);
-				DB.populateTable("hasEdge", edges);
-				connection.addDataForPresentation();
-				DB.populateAbonPainTable();
-				for(int ID : sheetIDs){
-					SheetsAndJava.deleteSheetData(ID);
-				}
-				System.out.println("Done");
-			} catch (Exception e) {
-				System.out.println("...Tables already there");
+				SheetsAndJava.deleteSheetData(ID);
+			} catch (GeneralSecurityException | IOException e) {
+				e.printStackTrace();
+				System.err.println("Error in email init");
 			}
 		}
 		System.out.println("App Initialized.");
