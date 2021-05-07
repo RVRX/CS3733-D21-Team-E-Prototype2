@@ -13,6 +13,8 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
@@ -40,6 +42,12 @@ public class ServiceRequests {
     @FXML //anchorPane for the appBar
     private AnchorPane appBarAnchorPane;
 
+    @FXML
+    private BorderPane bottomThing;
+
+    @FXML
+    private StackPane pane;
+
 //    @FXML //stackPane for DialogBoxes
 //    private StackPane stackPane;
 
@@ -54,6 +62,8 @@ public class ServiceRequests {
         //background.setPreserveRatio(true);
         background.fitWidthProperty().bind(primaryStage.widthProperty());
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
+        pane.getChildren().add(bottomThing);
+//        bottomThing.fitWidthProperty().bind(primaryStage.widthProperty());
 
         //init appBar
         javafx.scene.Node appBarComponent = null;
