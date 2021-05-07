@@ -848,7 +848,7 @@ public class newMapEditor {
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             DB.getNewCSVFile("hasEdge");
-            File saveEdges = new File("CSVs/outputEdge.csv");
+            File saveEdges = new File("CSVs/out/hasEdgeOutput.csv");
 
             //This is where tables are cleared and refilled
             DB.deleteEdgeTable();
@@ -1610,7 +1610,7 @@ public class newMapEditor {
 
 
         DB.getNewCSVFile("hasEdge");
-        File file = new File("CSVs/outputEdge.csv");
+        File file = new File("CSVs/out/hasEdgeOutput.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
         prepareEdges(edgeTreeTable);
