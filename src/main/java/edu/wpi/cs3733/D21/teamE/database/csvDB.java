@@ -65,6 +65,7 @@ public class csvDB {
 						EdgeDB.addLength(tempArr[1], tempArr[2]);
 						break;
 					default:
+						System.err.println("Table Name Not Recognized");
 						break;
 				}
 			}
@@ -122,6 +123,7 @@ public class csvDB {
 					break;
 
 				default:
+					System.err.println("Table Name Not Recognized");
 					break;
 			}
 		} catch (Exception e) {
