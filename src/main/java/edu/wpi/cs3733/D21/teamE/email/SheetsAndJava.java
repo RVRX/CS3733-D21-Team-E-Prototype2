@@ -117,8 +117,12 @@ public class SheetsAndJava {
     }
 
 
-    public static void deleteSheetData(int sheetID) throws GeneralSecurityException, IOException {
-        sheetsService = getSheetService();
+    public static void deleteSheetData(int sheetID) throws IOException {
+        try {
+            sheetsService = getSheetService();
+        } catch (GeneralSecurityException e) {
+            //e.printStackTrace(); Row did not exist
+        }
 
         DeleteDimensionRequest deleteDateCell = new DeleteDimensionRequest()
                 .setRange(

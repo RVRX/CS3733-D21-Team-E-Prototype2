@@ -142,7 +142,7 @@ public class App extends Application {
 		for (int ID : sheetIDs) {
 			try {
 				SheetsAndJava.deleteSheetData(ID);
-			} catch (GeneralSecurityException | IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				System.err.println("Error in email init");
 			}
