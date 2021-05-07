@@ -82,53 +82,47 @@ public class csvDB {
 	 */
 	public static void getNewCSVFile(String tableName) {
 
-		String sqlQuery = "select * from " + tableName;
-		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
+		try (PreparedStatement prepState = connection.prepareStatement("Select * From " + tableName)) {
 
-			ResultSet rSet1 = prepState.executeQuery();
+			ResultSet rSet = prepState.executeQuery();
+			StringBuilder SB = new StringBuilder();
 
-			if (tableName.equals("node")) {
+			switch (tableName) {
+				case "node":
+					while (rSet.next()) {
+						SB.append(rSet.getString("nodeID")).append(",");
+						SB.append(rSet.getInt("xCoord")).append(",");
+						SB.append(rSet.getInt("yCoord")).append(",");
+						SB.append(rSet.getString("floor")).append(",");
+						SB.append(rSet.getString("building")).append(",");
+						SB.append(rSet.getString("nodeType")).append(",");
+						SB.append(rSet.getString("longName")).append(",");
+						SB.append(rSet.getString("shortName")).append("\n");
+					}
+					rSet.close();
 
-				StringBuilder nodeSB = new StringBuilder();
-				while (rSet1.next()) {
+					FileWriter nodeWriter = new FileWriter("CSVs/nodeOutput.csv");
+					nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
+					nodeWriter.write(String.valueOf(SB));
+					nodeWriter.close();
+					break;
 
-					//File nodeCSV = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/output/outputNode.csv");
-					nodeSB.append(rSet1.getString("nodeID")).append(",");
-					nodeSB.append(rSet1.getInt("xCoord")).append(",");
-					nodeSB.append(rSet1.getInt("yCoord")).append(",");
-					nodeSB.append(rSet1.getString("floor")).append(",");
-					nodeSB.append(rSet1.getString("building")).append(",");
-					nodeSB.append(rSet1.getString("nodeType")).append(",");
-					nodeSB.append(rSet1.getString("longName")).append(",");
-					nodeSB.append(rSet1.getString("shortName")).append("\n");
+				case "hasEdge":
+					while (rSet.next()) {
+						SB.append(rSet.getString("edgeID")).append(",");
+						SB.append(rSet.getString("startNode")).append(",");
+						SB.append(rSet.getString("endNode")).append("\n");
+					}
+					rSet.close();
 
-				}
+					FileWriter hasEdgeWriter = new FileWriter("CSVs/hasEdgeOutput.csv");
+					hasEdgeWriter.write("edgeID, startNode, endNode\n");
+					hasEdgeWriter.write(String.valueOf(SB));
+					hasEdgeWriter.close();
+					break;
 
-				// create a file writer to write to files
-				FileWriter nodeWriter = new FileWriter("CSVs/outputNode.csv");
-				nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
-				nodeWriter.write(String.valueOf(nodeSB));
-				nodeWriter.close();
-			}
-
-			rSet1.close();
-
-			ResultSet rSet2 = prepState.executeQuery();
-
-			if (tableName.equals("hasEdge")) {
-				StringBuilder edgeSB = new StringBuilder();
-
-				while (rSet2.next()) {
-					//File edgeCSV = new File("CSVs/outputEdge.csv");
-					edgeSB.append(rSet2.getString("edgeID")).append(",");
-					edgeSB.append(rSet2.getString("startNode")).append(",");
-					edgeSB.append(rSet2.getString("endNode")).append("\n");
-				}
-
-				FileWriter edgeWriter = new FileWriter("CSVs/outputEdge.csv");
-				edgeWriter.write("edgeID, startNode, endNode\n");
-				edgeWriter.write(String.valueOf(edgeSB));
-				edgeWriter.close();
+				default:
+					break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
