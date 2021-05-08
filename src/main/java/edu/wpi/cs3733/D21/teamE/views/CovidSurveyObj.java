@@ -22,7 +22,7 @@ public class CovidSurveyObj extends RecursiveTreeObject<CovidSurveyObj> {
     private String noSymptomsDisplay;
     private String status;
 
-    public CovidSurveyObj(Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms, String status) {
+    public CovidSurveyObj(Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms) {
         this.user = user;
         this.userDisplay = user.toString();
         this.formNumber = formNumber;
@@ -37,7 +37,12 @@ public class CovidSurveyObj extends RecursiveTreeObject<CovidSurveyObj> {
         this.quarantineDisplay = quarantine.toString();
         this.noSymptoms = noSymptoms;
         this.noSymptomsDisplay = noSymptoms.toString();
-        this.status = status;
+        if(positiveTest || symptoms || closeContact || quarantine) {
+            this.status = "Unsafe";
+        }
+        if(noSymptoms && !positiveTest && !symptoms && !closeContact && !quarantine) {
+            this.status = "Safe";
+        }
     }
 
     public CovidSurveyObj(String userDisplay) {

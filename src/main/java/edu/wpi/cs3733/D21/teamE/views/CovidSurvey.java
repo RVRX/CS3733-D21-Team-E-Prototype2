@@ -99,10 +99,10 @@ public class CovidSurvey extends ServiceRequests {
 
 			//TODO: based on what user has selected, set the string to either "Needs to be reviewed", "Safe", "Unsafe"
 
-			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, "Needs to Be Reviewed");
+			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool);
 			DB.submitCovidSurvey(newSurvey, App.userID);
 			DB.addEntryRequest(newSurvey);
-			DB.updateUserAccountCovidStatus(App.userID, "Needs to Be Reviewed");
+			DB.updateUserAccountCovidStatus(App.userID, newSurvey.getStatus());
 			exit();
 		} else {
 			validateInput();
