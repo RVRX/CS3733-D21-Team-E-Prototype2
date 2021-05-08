@@ -295,8 +295,7 @@ public class RequestsDB {
 			boolean closeContact = rset.getBoolean("closeContact");
 			boolean quarantine = rset.getBoolean("quarantine");
 			boolean noSymptoms = rset.getBoolean("noSymptoms");
-			String status = rset.getString("status");
-			covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+			covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms));
 		}
 
 		rset.close();
