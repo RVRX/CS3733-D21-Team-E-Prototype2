@@ -164,17 +164,17 @@ public class CovidSurveyStatus {
         TreeItem<CovidSurveyObj> rootNode = new TreeItem<>(new CovidSurveyObj("Service Requests"));
 
         //Setting up sub-root nodes
-        TreeItem<CovidSurveyObj> unChecked = new TreeItem<>(new CovidSurveyObj("To Be Reviewed"));
-        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Marked as Risk"));
-        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Marked as Safe"));
+        TreeItem<CovidSurveyObj> unChecked = new TreeItem<>(new CovidSurveyObj("Waiting for Review"));
+        TreeItem<CovidSurveyObj> clearedForEntry = new TreeItem<>(new CovidSurveyObj("Cleared for entry"));
+        TreeItem<CovidSurveyObj> notClearedForEntry = new TreeItem<>(new CovidSurveyObj("Not cleared for entry"));
 
         //Adding sub-roots to nodes
-        rootNode.getChildren().addAll(unChecked,markedAsRisk,markedAsSafe);
+        rootNode.getChildren().addAll(unChecked,notClearedForEntry, clearedForEntry);
         covidSurveyTable.setRoot(rootNode);
         covidSurveyTable.setShowRoot(false);
 
         //Adding requests to table
-        addToTable(unChecked,markedAsSafe,markedAsRisk);
+        addToTable(unChecked,clearedForEntry,notClearedForEntry);
     }
 
     @FXML
