@@ -102,7 +102,7 @@ public class makeConnection {
 		} catch (java.sql.SQLException e) {
 			e.printStackTrace();
 		}
-		if (tablesInDB.size() != 0) {
+		if (tablesInDB.size() > 18) {
 			System.out.println("Tables already there");
 			return true;
 		} else return false;

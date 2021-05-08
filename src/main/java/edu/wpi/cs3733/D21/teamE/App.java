@@ -135,19 +135,21 @@ public class App extends Application {
 
 		if (DB.addDataFromCSVs()) System.out.println("\nPreserved data added from csv");
 
-		System.out.println("Populating Abon Pain Table");
-		DB.populateAbonPainTable();
-
-		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
-		for (int ID : sheetIDs) {
-			try {
-				SheetsAndJava.deleteSheetData(ID);
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.err.println("Error in email init");
-			}
+		if(DB.allTablesThere()) {
+//		System.out.println("Populating Abon Pain Table");
+//		DB.populateAbonPainTable();
+//
+//		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
+//		for (int ID : sheetIDs) {
+//			try {
+//				SheetsAndJava.deleteSheetData(ID);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				System.err.println("Error in email init");
+//			}
+//		}
 		}
-		System.out.println("App Initialized.");
+		System.out.println("App Initialized.\n\n\n");
 	}
 
 	/**

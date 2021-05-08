@@ -47,6 +47,10 @@ public class DB {
 		return makeConnection.makeConnection().addDataFromCSVs();
 	}
 
+	public static boolean allTablesThere() {
+		return makeConnection.makeConnection().allTablesThere();
+	}
+
 	public static int createNodeTable() {
 		return NodeDB.createNodeTable();
 	}
