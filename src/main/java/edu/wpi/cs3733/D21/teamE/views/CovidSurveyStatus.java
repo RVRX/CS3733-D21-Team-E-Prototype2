@@ -16,14 +16,25 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class CovidSurveyStatus {
 
+    @FXML // fx:id="background"
+    private ImageView background;
+
     @FXML
     private JFXTreeTableView<CovidSurveyObj> covidSurveyTable;
+
+    @FXML //anchorPane for the appBar
+    private AnchorPane appBarAnchorPane;
 
     @FXML
     private JFXButton markAsRiskButton;
@@ -179,6 +190,31 @@ public class CovidSurveyStatus {
 
     @FXML
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+        background.setPreserveRatio(false);
+        background.setFitWidth(primaryStage.getWidth());
+        background.setFitHeight(primaryStage.getHeight());
+
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        background.fitHeightProperty().bind(primaryStage.heightProperty());
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false); // show help or not
+            App.setShowLogin(true); // show login or not
+            App.setPageTitle("Service Request System"); //set AppBar title
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         prepareTable(covidSurveyTable);
     }
 
