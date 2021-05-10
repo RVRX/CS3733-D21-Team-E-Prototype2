@@ -1,130 +1,249 @@
-/**
- * Sample Skeleton for 'LoadingPage.fxml' Controller Class
- */
-
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.QRCode;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.states.DefaultState;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class LoadingPage {
 
-	@FXML // ResourceBundle that was given to the FXMLLoader
-	private ResourceBundle resources;
+	public static String previousScannedResult = null;
 
-	@FXML // URL location of the FXML file that was given to the FXMLLoader
-	private URL location;
+	@FXML
+	private AnchorPane appBarAnchorPane;
 
-	@FXML // fx:id="appBarAnchorPane"
-	private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
+	@FXML // fx:id="imageView"
+	private ImageView hospitalImageView;
 
-	@FXML // fx:id="stackPane"
-	private StackPane stackPane; // Value injected by FXMLLoader
-
-	@FXML // fx:id="hospitalImageView"
-	private ImageView hospitalImageView; // Value injected by FXMLLoader
+	@FXML // fx:id="imageView"
+	private ImageView logoImageView;
 
 	@FXML // fx:id="imageAnchorPane"
-	private AnchorPane imageAnchorPane; // Value injected by FXMLLoader
+	private AnchorPane imageAnchorPane;
 
 	@FXML // fx:id="rightAnchorPane"
-	private AnchorPane rightAnchorPane; // Value injected by FXMLLoader
+	private AnchorPane rightAnchorPane;
 
-	@FXML // fx:id="logoImageView"
-	private ImageView logoImageView; // Value injected by FXMLLoader
-
-	@FXML // fx:id="covidSurvey"
-	private JFXButton covidSurvey; // Value injected by FXMLLoader
-
-	@FXML // fx:id="pathFinderButton"
-	private JFXButton pathFinderButton; // Value injected by FXMLLoader
-
-	@FXML // fx:id="ScanQRCodeButton"
-	private JFXButton ScanQRCodeButton; // Value injected by FXMLLoader
-
-	@FXML // fx:id="DirectionsButton"
-	private JFXButton DirectionsButton; // Value injected by FXMLLoader
-
-	@FXML // fx:id="scheduleAppointmentButton"
-	private JFXButton scheduleAppointmentButton; // Value injected by FXMLLoader
-
-	@FXML // fx:id="serviceRequestButton"
-	private JFXButton serviceRequestButton; // Value injected by FXMLLoader
-
-	@FXML // fx:id="covidSurveyStatusButton"
-	private JFXButton covidSurveyStatusButton; // Value injected by FXMLLoader
-
-	@FXML // fx:id="userManagementButton"
-	private JFXButton userManagementButton; // Value injected by FXMLLoader
+	@FXML // fx:id="stackPane"
+	private StackPane stackPane; //main stack pane used for JFXDialog popups
 
 	@FXML // fx:id="mapEditorButton"
-	private JFXButton mapEditorButton; // Value injected by FXMLLoader
+	private JFXButton mapEditorButton;
 
-	@FXML // fx:id="carParkedText"
-	private Label carParkedText; // Value injected by FXMLLoader
+	@FXML // fx:id="serviceRequestButton"
+	private JFXButton serviceRequestButton;
 
-	@FXML // fx:id="LinkToParking"
-	private Hyperlink LinkToParking; // Value injected by FXMLLoader
+	@FXML // fx:id="userManagementButton"
+	private JFXButton userManagementButton;
 
-	@FXML // fx:id="algoTextTop"
-	private Label algoTextTop; // Value injected by FXMLLoader
+	@FXML // fx:id="scheduleAppointmentButton"
+	private JFXButton scheduleAppointmentButton;
 
-	@FXML // fx:id="algoTextBottom"
-	private Label algoTextBottom; // Value injected by FXMLLoader
+	@FXML // fx:id="covidSurveyStatusButton"
+	private JFXButton covidSurveyStatusButton;
 
 	@FXML // fx:id="algo"
-	private JFXComboBox<?> algo; // Value injected by FXMLLoader
+	private JFXComboBox algo;
 
 	@FXML // fx:id="applyChange"
-	private JFXButton applyChange; // Value injected by FXMLLoader
+	private JFXButton applyChange;
 
+	@FXML // fx:id="algoTextTop"
+	private Label algoTextTop;
+
+	@FXML // fx:id="algoTextBottom"
+	private Label algoTextBottom;
+
+	@FXML // fx:id="carParkedText"
+	private Label carParkedText;
+
+	@FXML // fx:id="LinkToParking"
+	private Hyperlink LinkToParking;
+
+	@FXML // fx:id="imageStackPane"
+	private StackPane imageStackPane;
+
+	private ObservableList<String> algoNames;
+
+	/**
+	 * Change Pathfinding Algorithm
+	 * @param e
+	 */
 	@FXML
-	void changeAlgo(ActionEvent event) {
-
+	private void changeAlgo(ActionEvent e) {
+		int algoIndex = algo.getSelectionModel().getSelectedIndex();
+		App.setSearchAlgo(algoIndex);
 	}
 
 	@FXML
-	void switchScene(ActionEvent event) {
-
+	private void toPathFinder(ActionEvent event) {
+		if(App.userID != 0) {
+			if(DB.filledCovidSurveyToday(App.userID)) {
+				if((DB.isUserCovidSafe(App.userID))) {
+					System.out.println("User is marked as safe");
+					ArrayList<Node> indexer = DB.getAllNodes();
+					int index = 0;
+					for(int i = 0; i < indexer.size(); i++) {
+						if(indexer.get(i).get("id").equals("FEXIT00201")) {
+							index = i;
+						}
+					}
+					PathFinder.endNodeIndex = index; //update this with the main entrance
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+						App.changeScene(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else if(DB.isUserCovidRisk(App.userID)){
+					System.out.println("User is marked as risk");
+					ArrayList<Node> indexer = DB.getAllNodes();
+					int index = 0;
+					for(int i = 0; i < indexer.size(); i++) {
+						if(indexer.get(i).get("id").equals("FEXIT00301")) {
+							index = i;
+						}
+					}
+					PathFinder.endNodeIndex = index; //update this to emergency entrance index
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+						App.changeScene(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else if(DB.isUserCovidUnmarked(App.userID)) {
+					App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
+					System.out.println("Covid submission needs to be reviewed first");
+				} else {
+					System.out.println("It was none of the three strings");
+				}
+			}
+		} else {
+			App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
+		}
 	}
 
 	@FXML
-	void toDirections(ActionEvent event) {
+	private void toScanQRCode(ActionEvent e) {
+		//String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+		// for normal testing and demo
+		String result = QRCode.scanQR();
+		// for submission
+		System.out.println("Scanned String: " + result);
+		String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
+		System.out.println("Scanned pure: " + pure);
+		String lable = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('/'));
+		System.out.println("Scanned lable: " + lable);
+		String code = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+		System.out.println("Scanned code: " + code);
 
+		// this magic line adds backward compatibility to our old code which used a different method to create...!
+		if (lable.equals("s")) lable = "n";
+
+		switch (lable) {
+			case "n":
+				ArrayList<Node> nodeArrayList = DB.getAllNodes();
+				int index = 0;
+				for (int i = 0; i < nodeArrayList.size(); i++) {
+					if (nodeArrayList.get(i).get("id").equals(code)) {
+						index = i;
+					}
+				}
+				PathFinder.startNodeIndex = index;
+				toPathFinder(e);
+				break;
+			case "p":
+				if (App.userID == 0) {
+					previousScannedResult = code;
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+						App.getPrimaryStage().getScene().setRoot(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					if (DB.submitParkingSlot(code, App.userID)) {
+						carParkedText.setVisible(true);
+						LinkToParking.setVisible(true);
+						// TODO get popup to say ur parking slot saved
+					} else {
+						break;
+						// TODO get popup to say ur parking slot was not saved
+					}
+				}
+				break;
+			default:
+				break;
+		}
 	}
 
 	@FXML
-	void toParking(ActionEvent event) {
-
+	private void toParking(ActionEvent e) {
+		ArrayList<Node> indexer = DB.getAllNodes();
+		String parked = DB.whereDidIPark(App.userID);
+		System.out.println(DB.whereDidIPark(App.userID));
+		for(int i = 0; i < indexer.size(); i++) {
+			if(indexer.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
+				PathFinder.endNodeName = indexer.get(i).get("longName");
+				System.out.println(PathFinder.endNodeName);
+			}
+		}
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+			App.changeScene(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
+
+	/**
+	 * Switch to a different scene
+	 * @param e tells which button was pressed
+	 */
+	@FXML
+	private void switchScene(ActionEvent e) {
+		DefaultState defaultState = new DefaultState();
+		defaultState.switchScene(e);
+	}
+
+//    @FXML
+//    private void toAppointmentPage(ActionEvent e) {
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
+//            App.setDraggableAndChangeScene(root);
+//        } catch (IOException ex) {
+//            System.out.println("Hi");
+//            ex.printStackTrace();
+//        }
+//    }
 
 	@FXML
-	void toPathFinder(ActionEvent event) {
-
+	public void getHelpDefault(ActionEvent actionEvent) {
 	}
 
-	@FXML
-	void toScanQRCode(ActionEvent event) {
-
-	}
-
-	@FXML // This method is called by the FXMLLoader when initialization is complete
-	void initialize() {
-
+	public void initialize() {
+		stackPane.setEffect(new GaussianBlur());
 		//init appBar
 		javafx.scene.Node appBarComponent = null;
 		try {
@@ -139,27 +258,75 @@ public class LoadingPage {
 			e.printStackTrace();
 		}
 
-		assert appBarAnchorPane != null : "fx:id=\"appBarAnchorPane\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert hospitalImageView != null : "fx:id=\"hospitalImageView\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert imageAnchorPane != null : "fx:id=\"imageAnchorPane\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert rightAnchorPane != null : "fx:id=\"rightAnchorPane\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert logoImageView != null : "fx:id=\"logoImageView\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert covidSurvey != null : "fx:id=\"covidSurvey\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert pathFinderButton != null : "fx:id=\"pathFinderButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert ScanQRCodeButton != null : "fx:id=\"ScanQRCodeButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert DirectionsButton != null : "fx:id=\"DirectionsButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert scheduleAppointmentButton != null : "fx:id=\"scheduleAppointmentButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert serviceRequestButton != null : "fx:id=\"serviceRequestButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert covidSurveyStatusButton != null : "fx:id=\"covidSurveyStatusButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert userManagementButton != null : "fx:id=\"userManagementButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert mapEditorButton != null : "fx:id=\"mapEditorButton\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert carParkedText != null : "fx:id=\"carParkedText\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert LinkToParking != null : "fx:id=\"LinkToParking\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert algoTextTop != null : "fx:id=\"algoTextTop\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert algoTextBottom != null : "fx:id=\"algoTextBottom\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert algo != null : "fx:id=\"algo\" was not injected: check your FXML file 'LoadingPage.fxml'.";
-		assert applyChange != null : "fx:id=\"applyChange\" was not injected: check your FXML file 'LoadingPage.fxml'.";
+		//Set up images
+		Stage primaryStage = App.getPrimaryStage();
+
+		Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		hospitalImageView.setImage(hospital);
+//		hospitalImageView.setEffect(new GaussianBlur());
+		hospitalImageView.setPreserveRatio(true);
+
+		hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+		hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
+		imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+		imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+
+		Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
+		logoImageView.setImage(logo);
+		logoImageView.setPreserveRatio(true);
+		//logoImageView.fitWidthProperty().bind(rightAnchorPane.widthProperty());
+		rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+		rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+		mapEditorButton.setVisible(false);
+		algoTextTop.setVisible(false);
+		algoTextBottom.setVisible(false);
+		algo.setVisible(false);
+		applyChange.setVisible(false);
+		userManagementButton.setVisible(false);
+		covidSurveyStatusButton.setVisible(false);
+		serviceRequestButton.setVisible(false);
+		LinkToParking.setVisible(false);
+		carParkedText.setVisible(false);
+		scheduleAppointmentButton.setVisible(false);
+
+
+//		//Set up algorithm choices
+//		algoNames = FXCollections.observableArrayList();
+//		algoNames.add("A* Search");
+//		algoNames.add("Depth First Search");
+//		algoNames.add("Breadth First Search");
+//		algoNames.add("Dijkstra Search");
+//		algoNames.add("Best First");
+//
+//		algo.setItems(algoNames);
+//		algo.setValue(algoNames.get(App.getSearchAlgo()));
+//
+//		String userType = UserAccountDB.getUserType(App.userID);
+//		if(App.userID == 0) {
+//			serviceRequestButton.setVisible(false);
+//		}
+//		if(!userType.equals("admin")) {
+//			mapEditorButton.setVisible(false);
+//			algoTextTop.setVisible(false);
+//			algoTextBottom.setVisible(false);
+//			algo.setVisible(false);
+//			applyChange.setVisible(false);
+//			userManagementButton.setVisible(false);
+//			covidSurveyStatusButton.setVisible(false);
+//		}
+
 
 	}
+
+	public void toDirections(ActionEvent actionEvent) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
+			App.changeScene(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 }
+

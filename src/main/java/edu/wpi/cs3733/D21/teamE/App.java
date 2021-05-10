@@ -140,7 +140,7 @@ public class App extends Application {
 		//Grab FXML for and set primary stage properties.
 		App.primaryStage = primaryStage;
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml")); //get the Default FXMl
+			Parent root = FXMLLoader.load(getClass().getResource("fxml/LoadingPage.fxml")); //get the Default FXMl
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			//set scene for primaryStage
 			Scene scene = new Scene(root);
