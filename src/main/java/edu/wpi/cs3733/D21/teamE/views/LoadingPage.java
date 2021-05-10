@@ -243,7 +243,7 @@ public class LoadingPage {
 	}
 
 	public void initialize() {
-		stackPane.setEffect(new GaussianBlur());
+
 		//init appBar
 		javafx.scene.Node appBarComponent = null;
 		try {
@@ -290,6 +290,9 @@ public class LoadingPage {
 		LinkToParking.setVisible(false);
 		carParkedText.setVisible(false);
 		scheduleAppointmentButton.setVisible(false);
+
+		hospitalImageView.setEffect(new GaussianBlur());
+		rightAnchorPane.setEffect(new GaussianBlur());
 
 
 //		//Set up algorithm choices
