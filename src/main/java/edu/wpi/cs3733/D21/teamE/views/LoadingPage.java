@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXSpinner;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
@@ -16,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -84,138 +86,11 @@ public class LoadingPage {
 	@FXML // fx:id="imageStackPane"
 	private StackPane imageStackPane;
 
-	private ObservableList<String> algoNames;
-
-	/**
-	 * Change Pathfinding Algorithm
-	 * @param e
-	 */
 	@FXML
-	private void changeAlgo(ActionEvent e) {
-		int algoIndex = algo.getSelectionModel().getSelectedIndex();
-		App.setSearchAlgo(algoIndex);
-	}
+	private JFXSpinner loadingSpinner;
 
-	@FXML
-	private void toPathFinder(ActionEvent event) {
-		if(App.userID != 0) {
-			if(DB.filledCovidSurveyToday(App.userID)) {
-				if((DB.isUserCovidSafe(App.userID))) {
-					System.out.println("User is marked as safe");
-					ArrayList<Node> indexer = DB.getAllNodes();
-					int index = 0;
-					for(int i = 0; i < indexer.size(); i++) {
-						if(indexer.get(i).get("id").equals("FEXIT00201")) {
-							index = i;
-						}
-					}
-					PathFinder.endNodeIndex = index; //update this with the main entrance
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.changeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				} else if(DB.isUserCovidRisk(App.userID)){
-					System.out.println("User is marked as risk");
-					ArrayList<Node> indexer = DB.getAllNodes();
-					int index = 0;
-					for(int i = 0; i < indexer.size(); i++) {
-						if(indexer.get(i).get("id").equals("FEXIT00301")) {
-							index = i;
-						}
-					}
-					PathFinder.endNodeIndex = index; //update this to emergency entrance index
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.changeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				} else if(DB.isUserCovidUnmarked(App.userID)) {
-					App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
-					System.out.println("Covid submission needs to be reviewed first");
-				} else {
-					System.out.println("It was none of the three strings");
-				}
-			}
-		} else {
-			App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
-		}
-	}
 
-	@FXML
-	private void toScanQRCode(ActionEvent e) {
-		//String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
-		// for normal testing and demo
-		String result = QRCode.scanQR();
-		// for submission
-		System.out.println("Scanned String: " + result);
-		String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
-		System.out.println("Scanned pure: " + pure);
-		String lable = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('/'));
-		System.out.println("Scanned lable: " + lable);
-		String code = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
-		System.out.println("Scanned code: " + code);
 
-		// this magic line adds backward compatibility to our old code which used a different method to create...!
-		if (lable.equals("s")) lable = "n";
-
-		switch (lable) {
-			case "n":
-				ArrayList<Node> nodeArrayList = DB.getAllNodes();
-				int index = 0;
-				for (int i = 0; i < nodeArrayList.size(); i++) {
-					if (nodeArrayList.get(i).get("id").equals(code)) {
-						index = i;
-					}
-				}
-				PathFinder.startNodeIndex = index;
-				toPathFinder(e);
-				break;
-			case "p":
-				if (App.userID == 0) {
-					previousScannedResult = code;
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
-						App.getPrimaryStage().getScene().setRoot(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				} else {
-					if (DB.submitParkingSlot(code, App.userID)) {
-						carParkedText.setVisible(true);
-						LinkToParking.setVisible(true);
-						// TODO get popup to say ur parking slot saved
-					} else {
-						break;
-						// TODO get popup to say ur parking slot was not saved
-					}
-				}
-				break;
-			default:
-				break;
-		}
-	}
-
-	@FXML
-	private void toParking(ActionEvent e) {
-		ArrayList<Node> indexer = DB.getAllNodes();
-		String parked = DB.whereDidIPark(App.userID);
-		System.out.println(DB.whereDidIPark(App.userID));
-		for(int i = 0; i < indexer.size(); i++) {
-			if(indexer.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
-				PathFinder.endNodeName = indexer.get(i).get("longName");
-				System.out.println(PathFinder.endNodeName);
-			}
-		}
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-			App.changeScene(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
 
 	/**
 	 * Switch to a different scene
@@ -238,9 +113,6 @@ public class LoadingPage {
 //        }
 //    }
 
-	@FXML
-	public void getHelpDefault(ActionEvent actionEvent) {
-	}
 
 	public void initialize() {
 
@@ -279,20 +151,13 @@ public class LoadingPage {
 		rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
 		rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
-		mapEditorButton.setVisible(false);
-		algoTextTop.setVisible(false);
-		algoTextBottom.setVisible(false);
-		algo.setVisible(false);
-		applyChange.setVisible(false);
-		userManagementButton.setVisible(false);
-		covidSurveyStatusButton.setVisible(false);
-		serviceRequestButton.setVisible(false);
-		LinkToParking.setVisible(false);
-		carParkedText.setVisible(false);
-		scheduleAppointmentButton.setVisible(false);
+
 
 		hospitalImageView.setEffect(new GaussianBlur());
 		rightAnchorPane.setEffect(new GaussianBlur());
+
+
+		loadingSpinner.setRadius(50);
 
 
 //		//Set up algorithm choices
@@ -323,13 +188,6 @@ public class LoadingPage {
 
 	}
 
-	public void toDirections(ActionEvent actionEvent) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
-			App.changeScene(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
+
 }
 
