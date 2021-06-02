@@ -37,9 +37,7 @@ If you choose a reminder option for the appointment or ToDo request functionalit
 
 1. Console will display a link, please open it (the window will open automatically)
 2. In the Google Sign-In page, click “Use another account”
-3. Log into Google with the following username and password:
-   
-> Username: engineeringsoftware3733@gmail.com Password: SoftEngCS3733
+3. Log into Google with the account you would like to send the emails
 
 4. A warning page will be displayed saying “Google has not verified this app”
 5. Click the greyed-out link “Advanced” in the bottom left
